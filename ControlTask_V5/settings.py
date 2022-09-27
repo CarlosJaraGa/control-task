@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -86,13 +87,17 @@ WSGI_APPLICATION = 'ControlTask_V5.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'control_tareas_v5',
+        'NAME': 'Control_tareas',
         'USER': 'root',
-        'PASSWORD': 'duoc123',
-        'HOST': 'localhost',
-        'PORT': '',
+        'PASSWORD': ';G@M^@{@h2N|>XVR',
+        'HOST': '34.176.97.67',
+        'PORT': '3306',
     }
 }
+
+
+
+
 
 
 # Password validation

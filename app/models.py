@@ -68,15 +68,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    
-
-
-
-
-
-
-
-
 
 class Empleado(models.Model):
     rut = models.CharField(primary_key=True, max_length=9)
@@ -134,14 +125,6 @@ class EstadoTarea(models.Model):
 
 
 
-
-
-
-
-
-
-
-
 class Tarea(models.Model):
     descripcion = models.CharField(max_length=500, blank=True, null=True)
     inicio = models.DateTimeField(blank=True, null=True)
@@ -150,7 +133,7 @@ class Tarea(models.Model):
     activo = models.IntegerField()
     estado = models.ForeignKey(EstadoTarea, models.DO_NOTHING, db_column='estado', blank=False, null=True)
     creador = models.ForeignKey(Empleado, models.DO_NOTHING, db_column='creador')
-    tarea_anterior = models.ForeignKey('self', models.DO_NOTHING, db_column='tarea_anterior', blank=False, null=True)
+    tarea_anterior = models.ForeignKey('self', models.DO_NOTHING, db_column='tarea_anterior', blank=False)
     nombre = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):

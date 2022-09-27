@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.hashers import make_password
+from django.db import connection
+
 
 
 
@@ -18,10 +20,6 @@ from django.contrib.auth.hashers import make_password
 @login_required
 def home(request):
     return render(request, 'app/home.html')
-
-
-
-
 
 
 
@@ -108,6 +106,26 @@ def creartarea(request):
         return render(request, 'app/creartarea.html', data)
 
 @login_required
+
+def crearunidadinterna (Nombre_unidad, id_empresa):
+    
+    data = {
+         'unidadinterna': UnidadInternaForm()
+    }
+
+    obj = connection.cursor()
+    query = "CALL Control_tareas.SP_crear_unidad_interna(%s, %s)"
+    val = (Nombre_unidad, id_empresa)
+
+    obj.execute(query,val)
+    obj.close()
+    connection.commit()
+
+    return render(data,'app/crearunidad.html')
+
+
+
+
 def crearunidadinterna(request):
     data = {
         'unidadinterna': UnidadInternaForm()
@@ -118,6 +136,7 @@ def crearunidadinterna(request):
             unidadsave.descripcion=request.POST.get('descripcion')
             unidadsave.id_empresa= Empresa.objects.get(pk=(request.POST.get('id_empresa')))
             cursor=connection.cursor()
+            
             cursor.execute("call SP_crear_unidad_interna('"+unidadsave.descripcion+"','"+str(unidadsave.id_empresa.id)+"')")
             messages.success(request, "La unidad "+unidadsave.descripcion+" se guardo correctamente ")
             return render(request, 'app/crearunidad.html', data)
@@ -125,25 +144,41 @@ def crearunidadinterna(request):
         return render(request, 'app/crearunidad.html', data)
 
 @login_required
-def listarusuario(request):
-    cursor=connection.cursor()
-    cursor.execute('call SP_listar_todos_empleados()')
-    results=cursor.fetchall()
+def listarusuario ():
     
-    page = request.GET.get('page', 1)
+    obj = connection.cursor()
+    obj.callproc("Control_tareas.SP_listar_todos_empleados")
+    lista = []
 
-    try:
-        paginator = Paginator(results, 6)
-        results = paginator.page(page)
-    except:
-        raise Http404
+    for result in obj.stored_results():
+        details = result.fetchall()
 
-    data = {
-        'entity': results,
-        'paginator': paginator
-    }
+    for det in details:
+        #print(det)
+        lista.append(det)
+    obj.close()
+    
+    return lista
 
-    return render(request, 'app/listarusuario.html', data)
+# def listarusuario(request):
+#     cursor=connection.cursor()
+#     cursor.execute('call SP_listar_todos_empleados()')
+#     results=cursor.fetchall()
+    
+#     page = request.GET.get('page', 1)
+
+#     try:
+#         paginator = Paginator(results, 6)
+#         results = paginator.page(page)
+#     except:
+#         raise Http404
+
+#     data = {
+#         'entity': results,
+#         'paginator': paginator
+#     }
+
+#     return render(request, 'app/listarusuario.html', data)
 
     
 @login_required
