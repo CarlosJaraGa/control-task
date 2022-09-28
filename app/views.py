@@ -107,21 +107,21 @@ def creartarea(request):
 
 @login_required
 
-def crearunidadinterna (Nombre_unidad, id_empresa):
+# def crearunidadinterna (Nombre_unidad, id_empresa):
     
-    data = {
-         'unidadinterna': UnidadInternaForm()
-    }
+#     data = {
+#          'unidadinterna': UnidadInternaForm()
+#     }
 
-    obj = connection.cursor()
-    query = "CALL Control_tareas.SP_crear_unidad_interna(%s, %s)"
-    val = (Nombre_unidad, id_empresa)
+#     obj = connection.cursor()
+#     query = "CALL Control_tareas.SP_crear_unidad_interna(%s, %s)"
+#     val = (Nombre_unidad, id_empresa)
 
-    obj.execute(query,val)
-    obj.close()
-    connection.commit()
+#     obj.execute(query,val)
+#     obj.close()
+#     connection.commit()
 
-    return render(data,'app/crearunidad.html')
+#     return render(data,'app/crearunidad.html')
 
 
 
@@ -144,41 +144,41 @@ def crearunidadinterna(request):
         return render(request, 'app/crearunidad.html', data)
 
 @login_required
-def listarusuario ():
+# def listarusuario ():
     
-    obj = connection.cursor()
-    obj.callproc("Control_tareas.SP_listar_todos_empleados")
-    lista = []
+#     obj = connection.cursor()
+#     obj.callproc("Control_tareas.SP_listar_todos_empleados")
+#     lista = []
 
-    for result in obj.stored_results():
-        details = result.fetchall()
+#     for result in obj.stored_results():
+#         details = result.fetchall()
 
-    for det in details:
-        #print(det)
-        lista.append(det)
-    obj.close()
+#     for det in details:
+#         #print(det)
+#         lista.append(det)
+#     obj.close()
     
-    return lista
+#     return lista
 
-# def listarusuario(request):
-#     cursor=connection.cursor()
-#     cursor.execute('call SP_listar_todos_empleados()')
-#     results=cursor.fetchall()
+def listarusuario(request):
+    cursor=connection.cursor()
+    cursor.execute('call SP_listar_todos_empleados()')
+    results=cursor.fetchall()
     
-#     page = request.GET.get('page', 1)
+    page = request.GET.get('page', 1)
 
-#     try:
-#         paginator = Paginator(results, 6)
-#         results = paginator.page(page)
-#     except:
-#         raise Http404
+    try:
+        paginator = Paginator(results, 6)
+        results = paginator.page(page)
+    except:
+        raise Http404
 
-#     data = {
-#         'entity': results,
-#         'paginator': paginator
-#     }
+    data = {
+        'entity': results,
+        'paginator': paginator
+    }
 
-#     return render(request, 'app/listarusuario.html', data)
+    return render(request, 'app/listarusuario.html', data)
 
     
 @login_required

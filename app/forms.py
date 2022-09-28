@@ -143,8 +143,8 @@ class AsignarRolForm(forms.ModelForm):
 #]
 
 class UnidadInternaForm(forms.ModelForm):
-    id_empresa = forms.ChoiceField(widget=forms.Select, label='Empresa', required=False)
-    descripcion = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder':'Ingrese Descripcion'}))
+    #id_empresa = forms.ChoiceField(widget=forms.Select, label='Empresa', required=False)
+    #descripcion = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder':'Ingrese Descripcion'}))
 
     class Meta:
         model = UnidadInterna
